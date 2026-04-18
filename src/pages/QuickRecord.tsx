@@ -136,11 +136,6 @@ export function QuickRecord() {
         </div>
       ) : (
         <>
-          {/* Sleep button */}
-          <button className="sleep-btn" onClick={handleSleep}>
-            🌙 睡覺
-          </button>
-
           {/* Normal recording */}
           <div className="record-card">
             <h1>過去 30 分鐘做了什麼？</h1>
@@ -182,6 +177,11 @@ export function QuickRecord() {
               </>
             )}
           </div>
+
+          {/* Sleep button */}
+          <button className="sleep-btn" onClick={handleSleep}>
+            🌙 睡覺
+          </button>
         </>
       )}
     </div>
