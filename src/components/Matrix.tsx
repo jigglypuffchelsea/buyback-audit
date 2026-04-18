@@ -1,5 +1,5 @@
 import type { TimeEntry } from '../types'
-import { SLOT_DURATION_MIN } from '../constants'
+import { getSlotDuration } from '../constants'
 
 interface Props {
   entries: TimeEntry[]
@@ -17,7 +17,7 @@ export function Matrix({ entries }: Props) {
   const aggregate = (filter: (e: TimeEntry) => boolean) => {
     const map = new Map<string, number>()
     tagged.filter(filter).forEach(e => {
-      map.set(e.activity, (map.get(e.activity) || 0) + SLOT_DURATION_MIN)
+      map.set(e.activity, (map.get(e.activity) || 0) + getSlotDuration())
     })
     return Array.from(map.entries())
       .map(([activity, minutes]) => ({ activity, minutes }))

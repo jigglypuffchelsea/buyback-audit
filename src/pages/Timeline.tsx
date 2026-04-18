@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DAY_SLOTS, formatDate, getSlotEndTime, AUDIT_DAYS } from '../constants'
+import { generateDaySlots, formatDate, getSlotEndTime, AUDIT_DAYS, getInterval, setInterval as setIntervalSetting, type IntervalType } from '../constants'
 import { getStartDate, setStartDate as saveStartDate } from '../api'
 import { useEntries } from '../hooks/useEntries'
 import { TimeSlot } from '../components/TimeSlot'
@@ -13,16 +13,22 @@ export function Timeline() {
   const [currentDate, setCurrentDate] = useState(() => {
     return startDate || formatDate(new Date())
   })
+  const [interval, setLocalInterval] = useState<IntervalType>(getInterval)
   const { entries, addEntry, updateEntry, removeEntry, getEntryForSlot, loading } = useEntries(currentDate)
 
-  // Edit modal state
   const [editSlot, setEditSlot] = useState<string | null>(null)
   const [editActivity, setEditActivity] = useState('')
   const [editEnergy, setEditEnergy] = useState<EnergyType>(null)
   const [editCost, setEditCost] = useState<CostType>(null)
   const [editEntry, setEditEntry] = useState<TimeEntry | null>(null)
 
-  // Start date setup
+  const slots = generateDaySlots(interval)
+
+  const handleIntervalChange = (val: IntervalType) => {
+    setIntervalSetting(val)
+    setLocalInterval(val)
+  }
+
   if (!startDate) {
     const today = formatDate(new Date())
     return (
@@ -49,7 +55,6 @@ export function Timeline() {
   const goDay = (offset: number) => {
     const d = new Date(currentDate)
     d.setDate(d.getDate() + offset)
-    // Clamp to audit range
     const diff = Math.floor((d.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
     if (diff >= 0 && diff < AUDIT_DAYS) {
       setCurrentDate(formatDate(d))
@@ -88,7 +93,7 @@ export function Timeline() {
   }
 
   const filledCount = entries.length
-  const totalSlots = DAY_SLOTS.length
+  const totalSlots = slots.length
 
   return (
     <div className="page timeline">
@@ -98,6 +103,17 @@ export function Timeline() {
           {current.getMonth() + 1}/{current.getDate()}（{weekday}）第 {dayNum} 天
         </span>
         <button onClick={() => goDay(1)} disabled={dayNum >= AUDIT_DAYS}>▶</button>
+      </div>
+
+      <div className="interval-toggle">
+        <button
+          className={interval === 30 ? 'active' : ''}
+          onClick={() => handleIntervalChange(30)}
+        >30 分鐘</button>
+        <button
+          className={interval === 60 ? 'active' : ''}
+          onClick={() => handleIntervalChange(60)}
+        >1 小時</button>
       </div>
 
       <div className="fill-rate">
@@ -111,7 +127,7 @@ export function Timeline() {
         <div className="loading">載入中...</div>
       ) : (
         <div className="slot-list">
-          {DAY_SLOTS.map(time => (
+          {slots.map(time => (
             <TimeSlot
               key={time}
               time={time}

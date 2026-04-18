@@ -1,6 +1,6 @@
 import { useEntries } from '../hooks/useEntries'
 import { Matrix } from '../components/Matrix'
-import { SLOT_DURATION_MIN } from '../constants'
+import { getSlotDuration } from '../constants'
 
 export function Report() {
   const { entries, loading } = useEntries()
@@ -8,7 +8,7 @@ export function Report() {
   if (loading) return <div className="page report"><div className="loading">載入中...</div></div>
 
   const totalEntries = entries.length
-  const totalMinutes = totalEntries * SLOT_DURATION_MIN
+  const totalMinutes = totalEntries * getSlotDuration()
   const totalHours = (totalMinutes / 60).toFixed(1)
 
   const tagged = entries.filter(e => e.energy)
@@ -23,10 +23,10 @@ export function Report() {
     .reduce((acc, e) => {
       const existing = acc.find(a => a.activity === e.activity)
       if (existing) {
-        existing.minutes += SLOT_DURATION_MIN
+        existing.minutes += getSlotDuration()
         existing.cost = Math.min(existing.cost, e.delegationCost!)
       } else {
-        acc.push({ activity: e.activity, minutes: SLOT_DURATION_MIN, cost: e.delegationCost! })
+        acc.push({ activity: e.activity, minutes: getSlotDuration(), cost: e.delegationCost! })
       }
       return acc
     }, [] as { activity: string; minutes: number; cost: number }[])
@@ -34,7 +34,7 @@ export function Report() {
 
   // Activity time ranking
   const activityRanking = entries.reduce((acc, e) => {
-    acc.set(e.activity, (acc.get(e.activity) || 0) + SLOT_DURATION_MIN)
+    acc.set(e.activity, (acc.get(e.activity) || 0) + getSlotDuration())
     return acc
   }, new Map<string, number>())
 

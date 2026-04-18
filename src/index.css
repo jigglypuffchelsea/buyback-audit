@@ -391,6 +391,35 @@ body {
   font-weight: 600;
 }
 
+/* Interval Toggle */
+.interval-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  background: var(--gray-100);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.interval-toggle button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-500);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.interval-toggle button.active {
+  background: white;
+  color: var(--gray-800);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 .fill-rate {
   font-size: 13px;
   color: var(--gray-500);
