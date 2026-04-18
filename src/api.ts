@@ -2,18 +2,19 @@ import type { TimeEntry } from './types'
 
 const SCRIPT_URL = import.meta.env.VITE_APPS_SCRIPT_URL as string || ''
 
-async function request(action: string, data?: Record<string, unknown>): Promise<unknown> {
-  if (!SCRIPT_URL) {
-    console.warn('Apps Script URL not set. Using localStorage fallback.')
-    return null
+async function apiGet(action: string, params?: Record<string, string>): Promise<unknown> {
+  if (!SCRIPT_URL) return null
+  const url = new URL(SCRIPT_URL)
+  url.searchParams.set('action', action)
+  if (params) {
+    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
   }
+  const res = await fetch(url.toString(), { redirect: 'follow' })
+  return res.json()
+}
 
-  if (!data) {
-    const url = `${SCRIPT_URL}?action=${action}`
-    const res = await fetch(url, { redirect: 'follow' })
-    return res.json()
-  }
-
+async function apiPost(action: string, data: Record<string, unknown>): Promise<unknown> {
+  if (!SCRIPT_URL) return null
   const res = await fetch(SCRIPT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
@@ -41,13 +42,15 @@ export async function fetchEntries(date?: string): Promise<TimeEntry[]> {
     const all = getLocalEntries()
     return date ? all.filter(e => e.date === date) : all
   }
-  const result = await request('getEntries', date ? { date } : undefined)
+  const result = date
+    ? await apiGet('getEntries', { date })
+    : await apiGet('getAllEntries')
   return (result as { entries: TimeEntry[] })?.entries ?? []
 }
 
 export async function fetchAllEntries(): Promise<TimeEntry[]> {
   if (!SCRIPT_URL) return getLocalEntries()
-  const result = await request('getAllEntries')
+  const result = await apiGet('getAllEntries')
   return (result as { entries: TimeEntry[] })?.entries ?? []
 }
 
@@ -60,7 +63,7 @@ export async function saveEntry(entry: TimeEntry): Promise<void> {
     setLocalEntries(entries)
     return
   }
-  await request('saveEntry', { entry: entry as unknown as Record<string, unknown> })
+  await apiPost('saveEntry', { entry: entry as unknown as Record<string, unknown> })
 }
 
 export async function deleteEntry(id: string): Promise<void> {
@@ -68,7 +71,7 @@ export async function deleteEntry(id: string): Promise<void> {
     setLocalEntries(getLocalEntries().filter(e => e.id !== id))
     return
   }
-  await request('deleteEntry', { id })
+  await apiPost('deleteEntry', { id })
 }
 
 // --- Recent activities ---

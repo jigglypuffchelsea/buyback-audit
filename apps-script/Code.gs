@@ -74,7 +74,7 @@ function getEntries(date) {
     headers.forEach((h, j) => { row[h] = data[i][j]; });
 
     // 日期篩選
-    if (date && row.date !== date) return;
+    if (date && String(row.date) !== String(date)) continue;
 
     entries.push({
       id: row.id,
