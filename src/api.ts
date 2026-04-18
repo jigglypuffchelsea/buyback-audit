@@ -96,3 +96,24 @@ export function getStartDate(): string {
 export function setStartDate(date: string) {
   localStorage.setItem('buyback-start-date', date)
 }
+
+// --- Sleep tracking ---
+
+export interface SleepState {
+  sleeping: boolean
+  sleepStart: string // ISO timestamp
+}
+
+export function getSleepState(): SleepState {
+  const raw = localStorage.getItem('buyback-sleep')
+  if (raw) return JSON.parse(raw)
+  return { sleeping: false, sleepStart: '' }
+}
+
+export function setSleepState(state: SleepState) {
+  localStorage.setItem('buyback-sleep', JSON.stringify(state))
+}
+
+export function clearSleepState() {
+  localStorage.removeItem('buyback-sleep')
+}

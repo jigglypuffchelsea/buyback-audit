@@ -12,8 +12,10 @@ const COST_LABELS = ['', '$', '$$', '$$$', '$$$$']
 export function TimeSlot({ time, entry, onTap }: Props) {
   const endTime = getSlotEndTime(time)
 
+  const isSleep = entry?.activity === '睡覺'
   let statusClass = 'slot-empty'
-  if (entry?.energy) statusClass = `slot-${entry.energy}`
+  if (isSleep) statusClass = 'slot-sleep'
+  else if (entry?.energy) statusClass = `slot-${entry.energy}`
   else if (entry) statusClass = 'slot-recorded'
 
   return (

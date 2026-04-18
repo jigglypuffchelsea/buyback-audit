@@ -103,7 +103,76 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 40px;
+  padding-top: 24px;
+}
+
+/* Sleep Button */
+.sleep-btn {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #6366f1;
+  border-radius: 10px;
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: all 0.15s;
+}
+
+.sleep-btn:active {
+  background: #c7d2fe;
+}
+
+/* Sleep Card */
+.sleep-card {
+  text-align: center;
+  background: #1e1b4b !important;
+  color: white;
+}
+
+.sleep-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.sleep-card h1 {
+  color: white;
+}
+
+.sleep-since {
+  color: #a5b4fc;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.sleep-duration {
+  font-size: 28px;
+  font-weight: 700;
+  color: #c7d2fe;
+  margin-bottom: 20px;
+}
+
+.wake-btn {
+  background: #f59e0b !important;
+  color: #1e1b4b !important;
+  font-size: 18px !important;
+}
+
+.wake-btn:active:not(:disabled) {
+  background: #d97706 !important;
+}
+
+.cancel-sleep-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: none;
+  color: #6366f1;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 8px;
 }
 
 .record-card {
@@ -488,6 +557,12 @@ body {
 .slot-red {
   background: var(--red-bg);
   border-left-color: var(--red);
+}
+
+.slot-sleep {
+  background: #eef2ff;
+  border-left-color: #6366f1;
+  opacity: 0.7;
 }
 
 .slot-time {
