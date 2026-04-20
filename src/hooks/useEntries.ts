@@ -32,22 +32,26 @@ export function useEntries(date?: string) {
       delegationCost,
       createdAt: new Date().toISOString(),
     }
-    await api.saveEntry(entry)
+    // 立刻更新畫面
+    setEntries(prev => [...prev, entry])
     api.addRecentActivity(activity)
-    await load()
+    // 背景存到 Google Sheet
+    api.saveEntry(entry)
     return entry
-  }, [load])
+  }, [])
 
   const updateEntry = useCallback(async (entry: TimeEntry) => {
-    await api.saveEntry(entry)
+    // 立刻更新畫面
+    setEntries(prev => prev.map(e => e.id === entry.id ? entry : e))
     if (entry.activity) api.addRecentActivity(entry.activity)
-    await load()
-  }, [load])
+    api.saveEntry(entry)
+  }, [])
 
   const removeEntry = useCallback(async (id: string) => {
-    await api.deleteEntry(id)
-    await load()
-  }, [load])
+    // 立刻更新畫面
+    setEntries(prev => prev.filter(e => e.id !== id))
+    api.deleteEntry(id)
+  }, [])
 
   const getEntryForSlot = useCallback((slotTime: string) => {
     return entries.find(e => e.startTime === slotTime) || null
