@@ -931,3 +931,161 @@ body {
   padding: 40px;
   color: var(--gray-400);
 }
+
+/* ===== Week Calendar ===== */
+.week-view {
+  padding: 12px 8px;
+  max-width: 100%;
+}
+
+.week-view .date-nav span {
+  font-size: 15px;
+}
+
+.week-view .interval-toggle {
+  margin-bottom: 8px;
+}
+
+.wk-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  background: white;
+}
+
+.wk-table {
+  width: 100%;
+  min-width: 420px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 12px;
+}
+
+/* Header */
+.wk-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+}
+
+.wk-time-col {
+  width: 48px;
+  min-width: 48px;
+}
+
+.wk-day-header {
+  padding: 6px 2px;
+  text-align: center;
+  border-bottom: 2px solid var(--gray-200);
+  font-weight: 500;
+}
+
+.wk-weekday {
+  display: block;
+  font-size: 11px;
+  color: var(--gray-500);
+  font-weight: 400;
+}
+
+.wk-date-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.wk-today-header {
+  color: var(--gray-800);
+}
+
+.wk-today-num {
+  background: var(--gray-800);
+  color: white;
+}
+
+/* Time label */
+.wk-time-label {
+  padding: 0 4px;
+  font-size: 10px;
+  color: var(--gray-400);
+  text-align: right;
+  vertical-align: top;
+  padding-top: 2px;
+  font-variant-numeric: tabular-nums;
+  border-right: 1px solid var(--gray-200);
+  white-space: nowrap;
+}
+
+/* Cells */
+.wk-cell {
+  height: 32px;
+  border: 0.5px solid var(--gray-100);
+  padding: 1px;
+  cursor: pointer;
+  vertical-align: top;
+  position: relative;
+  transition: background 0.1s;
+}
+
+.wk-cell:active {
+  opacity: 0.7;
+}
+
+.wk-cell-text {
+  display: block;
+  font-size: 10px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 2px 3px;
+}
+
+/* Cell states */
+.wk-empty {
+  background: white;
+}
+
+.wk-recorded {
+  background: var(--gray-100);
+}
+
+.wk-recorded .wk-cell-text {
+  color: var(--gray-600);
+}
+
+.wk-green {
+  background: var(--green-bg);
+  border-color: var(--green-border);
+}
+
+.wk-green .wk-cell-text {
+  color: #166534;
+  font-weight: 500;
+}
+
+.wk-red {
+  background: var(--red-bg);
+  border-color: var(--red-border);
+}
+
+.wk-red .wk-cell-text {
+  color: #991b1b;
+  font-weight: 500;
+}
+
+.wk-sleep {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+
+.wk-sleep .wk-cell-text {
+  color: #6366f1;
+  font-size: 9px;
+}
